@@ -26,7 +26,7 @@ Ou si vous voulez utiliser directement le badge SVG dynamique depuis le serveur 
 ![Zeta Status](https://zeta.onrender.com/apiv1/server/badge/status)
 
 
-🔹 Fonctionnement
+##🔹 Fonctionnement
 Le serveur Render met à jour un fichier status.json via Flask :
 
 "starting" → pré-lancement
@@ -44,7 +44,7 @@ La page GitHub Pages lit ce fichier JSON et affiche le badge avec la couleur et 
 Si le serveur ne répond pas, la page affiche automatiquement le badge Offline.
 
 
-🔹 Déploiement
+##🔹 Déploiement
 Mettre le fichier index.html dans votre dépôt votre_pseudo.github.io/zeta-status.
 
 Activer GitHub Pages pour ce dépôt.
@@ -52,7 +52,7 @@ Activer GitHub Pages pour ce dépôt.
 Accéder à la page publique : https://votre_pseudo.github.io/zeta-status.
 
 
-🔹 Personnalisation
+##🔹 Personnalisation
 La taille du badge : modifiez width et height dans le SVG.
 
 Les couleurs : modifiez le colorMap dans le script JS.
