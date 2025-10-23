@@ -4,17 +4,66 @@
 <meta charset="UTF-8">
 <title>Status Zeta</title>
 <style>
-  body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
-  #badge { display: inline-block; padding: 10px 20px; border-radius: 5px; color: white; font-weight: bold; }
-  .running { background-color: orange; }
-  .online { background-color: green; }
-  .stopping { background-color: purple; }
-  .offline { background-color: red; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background: #1e1e2f;
+    color: #fff;
+  }
+
+  h1 {
+    margin-bottom: 40px;
+    font-size: 2em;
+    text-shadow: 0 0 10px #000;
+  }
+
+  #badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5em 1.2em;
+    border-radius: 999px;
+    font-weight: bold;
+    font-size: 1.2em;
+    color: white;
+    min-width: 140px;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: background 0.5s, transform 0.3s;
+  }
+
+  #badge span {
+    margin-left: 0.5em;
+    font-size: 1em;
+  }
+
+  /* Statuts avec gradients */
+  .running { background: linear-gradient(135deg, #ffa500, #ff8c00); }
+  .online { background: linear-gradient(135deg, #28a745, #218838); }
+  .stopping { background: linear-gradient(135deg, #6f42c1, #5a32a3); }
+  .offline { background: linear-gradient(135deg, #dc3545, #b02a37); }
+
+  /* Animation pulse pour les statuts actifs */
+  .running, .online, .stopping {
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+    50% { transform: scale(1.05); box-shadow: 0 6px 20px rgba(0,0,0,0.5); }
+    100% { transform: scale(1); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+  }
 </style>
 </head>
 <body>
 <h1>Statut du serveur Zeta</h1>
-<div id="badge" class="offline">offline</div>
+<div id="badge" class="offline">
+  <span>❌ offline</span>
+</div>
 
 <script>
 async function updateStatus() {
@@ -24,15 +73,23 @@ async function updateStatus() {
         if (!res.ok) throw new Error("Serveur non joignable");
         const data = await res.json();
         const status = data.status || "offline";
-        badge.textContent = status;
+
         badge.className = status;
+        let icon;
+        switch(status) {
+            case "running": icon = "⏳"; break;
+            case "online": icon = "✅"; break;
+            case "stopping": icon = "⚠️"; break;
+            case "offline": icon = "❌"; break;
+        }
+        badge.innerHTML = `<span>${icon} ${status}</span>`;
     } catch (e) {
-        badge.textContent = "offline";
         badge.className = "offline";
+        badge.innerHTML = `<span>❌ offline</span>`;
     }
 }
 
-// Mettre à jour toutes les 5 secondes
+// Mettre à jour toutes les 1 secondes
 updateStatus();
 setInterval(updateStatus, 1000);
 </script>
