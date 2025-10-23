@@ -2,96 +2,39 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Zeta Server Status</title>
+<title>Status Zeta</title>
 <style>
-body {
-    font-family: Arial, sans-serif;
-    background: #1e1e1e;
-    color: #fff;
-    text-align: center;
-    margin-top: 10%;
-}
-h1 {
-    font-size: 2.2em;
-    margin-bottom: 20px;
-}
-#badge {
-    display: inline-block;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-}
+  body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+  #badge { display: inline-block; padding: 10px 20px; border-radius: 5px; color: white; font-weight: bold; }
+  .running { background-color: orange; }
+  .online { background-color: green; }
+  .stopping { background-color: purple; }
+  .offline { background-color: red; }
 </style>
 </head>
 <body>
-<h1>🚀 Zeta Server Status</h1>
-<div id="badge">
-    <!-- Badge SVG sera inséré ici -->
-    <svg xmlns="http://www.w3.org/2000/svg" width="200" height="30">
-        <rect width="200" height="30" fill="#7f8c8d"/>
-        <text x="100" y="20" fill="#fff" text-anchor="middle" font-family="Arial" font-size="14">
-            OFFLINE
-        </text>
-    </svg>
-</div>
+<h1>Statut du serveur Zeta</h1>
+<div id="badge" class="offline">offline</div>
 
 <script>
-// URL publique du status JSON sur Render
-const STATUS_URL = "https://zeta.onrender.com/status.json";
-
-async function updateBadge() {
-    const badgeDiv = document.getElementById("badge");
-
+async function updateStatus() {
+    const badge = document.getElementById("badge");
     try {
-        const res = await fetch(STATUS_URL, { cache: "no-store" });
-        if (!res.ok) throw new Error("Serveur injoignable");
+        const res = await fetch("https://zeta-ps1y.onrender.com/status.json");
+        if (!res.ok) throw new Error("Serveur non joignable");
         const data = await res.json();
         const status = data.status || "offline";
-
-        // Couleurs selon status
-        const colorMap = {
-            "online": "#4c1",
-            "running": "#f1c40f",
-            "starting": "#e67e22",
-            "stopping": "#e74c3c",
-            "offline": "#7f8c8d"
-        };
-        const textMap = {
-            "online": "🟢 Online",
-            "running": "🟡 Running",
-            "starting": "🟠 Starting",
-            "stopping": "🔴 Stopping",
-            "offline": "⚫ Offline"
-        };
-
-        const color = colorMap[status] || "#7f8c8d";
-        const text = textMap[status] || "⚫ Offline";
-
-        // Générer le SVG
-        badgeDiv.innerHTML = `
-            <svg xmlns="http://www.w3.org/2000/svg" width="200" height="30">
-                <rect width="200" height="30" fill="${color}"/>
-                <text x="100" y="20" fill="#fff" text-anchor="middle" font-family="Arial" font-size="14">
-                    ${text}
-                </text>
-            </svg>
-        `;
-    } catch (err) {
-        // Serveur offline ou unreachable
-        badgeDiv.innerHTML = `
-            <svg xmlns="http://www.w3.org/2000/svg" width="200" height="30">
-                <rect width="200" height="30" fill="#7f8c8d"/>
-                <text x="100" y="20" fill="#fff" text-anchor="middle" font-family="Arial" font-size="14">
-                    ⚫ Offline
-                </text>
-            </svg>
-        `;
+        badge.textContent = status;
+        badge.className = status;
+    } catch (e) {
+        badge.textContent = "offline";
+        badge.className = "offline";
     }
 }
 
-// Mettre à jour au chargement et toutes les 10 secondes
-updateBadge();
-setInterval(updateBadge, 10000);
+// Mettre à jour toutes les 5 secondes
+updateStatus();
+setInterval(updateStatus, 1000);
 </script>
 </body>
 </html>
