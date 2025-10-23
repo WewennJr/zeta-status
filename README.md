@@ -9,7 +9,7 @@
 | Statut       | Description |
 |-------------|------------|
 | ⚫ Offline   | Le serveur Render est éteint ou injoignable |
-| 🟠 Starting | Render démarre le conteneur et installe les dépendances | (indisponible pour le moment) |
+| 🟠 Starting | Render démarre le conteneur et installe les dépendances (indisponible pour le moment) |
 | 🟡 Running  | `app.py` a démarré mais certaines parties ne sont pas encore prêtes |
 | 🟢 Online   | Le serveur est complètement prêt et fonctionnel |
 | 🔴 Stopping | Le serveur est en train de s’arrêter |
