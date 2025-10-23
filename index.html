@@ -2,10 +2,10 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Status Zeta</title>
+<title>Zeta Ping</title>
 <style>
   body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -13,73 +13,50 @@
     height: 100vh;
     margin: 0;
     background: #1e1e2f;
-    color: #fff;
+    color: white;
   }
 
   h1 {
-    margin-bottom: 40px;
+    margin-bottom: 20px;
+  }
+
+  #status {
     font-size: 2em;
-    text-shadow: 0 0 10px #000;
-  }
-
-  #badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.5em 1.2em;
-    border-radius: 999px;
     font-weight: bold;
-    font-size: 1.2em;
-    color: white;
-    min-width: 140px;
-    justify-content: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    transition: background 0.5s, transform 0.3s;
   }
 
-  #badge span {
-    margin-left: 0.5em;
-    font-size: 1em;
-  }
-
-  /* Couleurs */
-  .online { background: linear-gradient(135deg, #28a745, #218838); animation: pulse 2s infinite; }
-  .offline { background: linear-gradient(135deg, #dc3545, #b02a37); }
-
-  @keyframes pulse {
-    0% { transform: scale(1); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-    50% { transform: scale(1.05); box-shadow: 0 6px 20px rgba(0,0,0,0.5); }
-    100% { transform: scale(1); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-  }
+  .online { color: #28a745; }
+  .offline { color: #dc3545; }
 </style>
 </head>
 <body>
-<h1>Statut du serveur Zeta</h1>
-<div id="badge" class="offline">
-  <span>❌ offline</span>
-</div>
+<h1>Ping serveur Zeta</h1>
+<div id="status" class="offline">❌ offline</div>
 
 <script>
 const SERVER_URL = "https://zeta-ps1y.onrender.com";
 
-async function updateStatus() {
-    const badge = document.getElementById("badge");
+async function pingServer() {
+    const statusEl = document.getElementById("status");
     try {
-        const res = await fetch(SERVER_URL, { method: "HEAD" });
+        // HEAD échoue parfois avec Render à cause de CORS, GET plus sûr
+        const res = await fetch(SERVER_URL, { method: "GET" });
         if (res.ok) {
-            badge.className = "online";
-            badge.innerHTML = `<span>✅ online</span>`;
+            statusEl.textContent = "✅ online";
+            statusEl.className = "online";
         } else {
-            throw new Error("Serveur non OK");
+            statusEl.textContent = "❌ offline";
+            statusEl.className = "offline";
         }
     } catch (e) {
-        badge.className = "offline";
-        badge.innerHTML = `<span>❌ offline</span>`;
+        statusEl.textContent = "❌ offline";
+        statusEl.className = "offline";
     }
 }
 
-// Mise à jour toutes les secondes
-updateStatus();
-setInterval(updateStatus, 1000);
+// Ping toutes les 5 secondes
+pingServer();
+setInterval(pingServer, 5000);
 </script>
 </body>
 </html>
