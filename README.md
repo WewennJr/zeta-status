@@ -33,3 +33,33 @@ Ou si vous voulez utiliser directement le **fichier JSON ou badge SVG dynamique 
   {
       "status": "online"
   }
+Ainsi, vous n’avez pas besoin de cloner le dépôt ; vous pouvez simplement faire un fetch ou un curl depuis votre application pour obtenir le statut du serveur en temps réel.
+
+## 🔹 Fonctionnement
+Le serveur Render met à jour un fichier status.json via Flask :
+
+"running" → app.py a commencé l’initialisation
+
+"online" → toutes les fonctionnalités prêtes
+
+"stopping" → fermeture en cours (via atexit)
+
+"offline" → serveur éteint ou non joignable
+
+La page GitHub Pages lit ce fichier JSON et affiche le badge avec la couleur et l’emoji correspondant.
+
+Si le serveur ne répond pas, la page affiche automatiquement le badge "offline".
+
+## 🔹 Déploiement
+Mettre le fichier index.html dans votre dépôt votre_pseudo.github.io/zeta-status.
+
+Activer GitHub Pages pour ce dépôt.
+
+Accéder à la page publique : https://votre_pseudo.github.io/zeta-status.
+
+## 🔹 Personnalisation
+La taille du badge : modifiez width et height dans le SVG.
+
+Les couleurs : modifiez les classes CSS ou le colorMap dans le script JS.
+
+La fréquence de mise à jour : changez l’intervalle setInterval(updateStatus, 5000) en millisecondes.
