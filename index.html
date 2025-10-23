@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Zeta Ping</title>
+<title>Status Zeta</title>
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -30,18 +30,18 @@
 </style>
 </head>
 <body>
-<h1>Ping serveur Zeta</h1>
+<h1>Status du serveur Zeta</h1>
 <div id="status" class="offline">❌ offline</div>
 
 <script>
-const SERVER_URL = "https://zeta-ps1y.onrender.com";
+const STATUS_URL = "https://zeta-ps1y.onrender.com/apiv1/status";
 
-async function pingServer() {
+async function updateStatus() {
     const statusEl = document.getElementById("status");
     try {
-        // HEAD échoue parfois avec Render à cause de CORS, GET plus sûr
-        const res = await fetch(SERVER_URL, { method: "GET" });
-        if (res.ok) {
+        const res = await fetch(STATUS_URL);
+        const data = await res.json();
+        if (data.status === "online") {
             statusEl.textContent = "✅ online";
             statusEl.className = "online";
         } else {
@@ -54,9 +54,9 @@ async function pingServer() {
     }
 }
 
-// Ping toutes les 5 secondes
-pingServer();
-setInterval(pingServer, 5000);
+// Mise à jour toutes les secondes
+updateStatus();
+setInterval(updateStatus, 1000);
 </script>
 </body>
 </html>
